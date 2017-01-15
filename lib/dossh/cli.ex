@@ -41,10 +41,6 @@ defmodule Dossh.CLI do
     |> render_table
   end
 
-  def table_header do
-    IO.write Table.table( %{ "Droplet Name" => "IP Address" } )
-  end
-
   def droplet_info_string(droplet) do
     " #{droplet[:droplet_name]}, ip address: #{droplet[:ip_address]}"
   end
