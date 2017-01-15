@@ -8,11 +8,19 @@ defmodule Dossh.Mixfile do
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     description: description(),
+     package: package(),
      deps: deps()]
   end
 
   def application do
     [ applications: [:logger, :httpoison, :table_rex] ]
+  end
+
+  defp description do
+    """
+    Simple command line utility to access information about the user's digital ocean droplets
+    """
   end
 
   defp deps do
@@ -25,5 +33,13 @@ defmodule Dossh.Mixfile do
 
   defp escript_config do
     [ main_module: Dossh.CLI ]
+  end
+
+  defp package do
+    [ # These are the default files included in the package
+      files: ["lib", "priv", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
+      maintainers: ["Stephen Mariano Cabrera <stephen.m.cabrera@gmail.com"],
+      licenses: ["MIT"],
+      links: %{Github => "https://github.com/smcabrera/dossh"}]
   end
 end
