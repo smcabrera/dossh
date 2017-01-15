@@ -37,7 +37,7 @@ defmodule Dossh.Mixfile do
 
   defp package do
     [ # These are the default files included in the package
-      files: ["lib", "priv", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Stephen Mariano Cabrera <stephen.m.cabrera@gmail.com"],
       licenses: ["MIT"],
       links: %{Github => "https://github.com/smcabrera/dossh"}]
