@@ -28,6 +28,7 @@ defmodule Dossh.Mixfile do
       { :httpoison, "~> 0.9" },
       { :poison, "~> 2.2" },
       { :table_rex, "~> 0.8" },
+      { :ex_doc, ">= 0.0.0", only: :dev },
     ]
   end
 
