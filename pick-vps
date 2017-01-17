@@ -1,0 +1,3 @@
+#!/bin/sh
+vps=$(dossh ls -n | pick)
+ssh root@$(dossh ls | grep $vps | cut -d = -f 2)

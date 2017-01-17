@@ -18,7 +18,10 @@ defmodule Dossh.CLI do
 
   def parse_args(argv) do
     parse = OptionParser.parse(argv, switches: [ "help": :boolean, "ip-address": :boolean, "name": :boolean],
-                                     aliases:  [ h:    :help ])
+                                     aliases:  [ h:    :help,
+                                                 i:    :ip_address,
+                                                 n:    :name
+                                     ])
     case parse do
 
       { [ help: true ] }
@@ -27,9 +30,17 @@ defmodule Dossh.CLI do
       { [], ["table"], [] } 
         -> :table
 
-      { [], ["ls"], [_] } 
-        -> :ls
+      { [], ["ls"], [] } 
+      -> {:ls, nil}
 
+      { [ip_address: true], ["ls"], [] }
+        -> {:ls, :ip_address}
+
+      { [name: true], ["ls"], [] }
+        -> {:ls, :name}
+
+      #{ [], ["ls"], ["ip-address": true] } 
+        #-> :ls
     end
   end
 
@@ -62,13 +73,50 @@ defmodule Dossh.CLI do
     |> render_table
   end
 
-  def process(:ls) do
+  def process({:ls, filter}) do
     Dossh.Droplets.fetch
+    |> output_list(filter)
     |> render_list 
   end
 
-  def render_list(droplets) do
+  #def process(:ls_just_ip) do
+    #Dossh.Droplets.fetch
+    #|> ip_address_list
+    #|> render_list 
+  #end
+
+  #def process(:ls_just_names) do
+    #Dossh.Droplets.fetch
+    #|> droplet_name_list
+    #|> render_list 
+  #end
+
+  defp output_list(droplets, :ip_address) do
+    Enum.map(droplets, fn(droplet) -> "#{droplet[:ip_address]}" end)
+  end
+
+  defp output_list(droplets, :name) do
+    Enum.map(droplets, fn(droplet) -> "#{droplet[:droplet_name]}" end)
+  end
+
+  defp output_list(droplets, _) do
     Enum.map(droplets, fn(droplet) -> "#{droplet[:droplet_name]}=#{droplet[:ip_address]}" end)
+  end
+
+  #defp ip_address_list(droplets) do
+    #Enum.map(droplets, fn(droplet) -> "#{droplet[:ip_address]}" end)
+  #end
+
+  #defp droplet_name_list(droplets) do
+    #Enum.map(droplets, fn(droplet) -> "#{droplet[:droplet_name]}" end)
+  #end
+
+  #def names_and_ip_addresses_list(droplets) do
+    #Enum.map(droplets, fn(droplet) -> "#{droplet[:droplet_name]}=#{droplet[:ip_address]}" end)
+  #end
+
+  def render_list(list) do
+    list
     |> Enum.join("\n")
     |> IO.puts
   end
